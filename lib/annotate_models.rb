@@ -38,7 +38,7 @@ module AnnotateModels
         indices[column_name].last << "(unique)" if index.unique
       end
     end
-v
+
     max_size = klass.column_names.collect{|name| name.size}.max + 1
     klass.columns.each do |col|
       attrs = []
@@ -56,7 +56,7 @@ v
         col_type << "(#{col.limit})" if col.limit
       end
       info << sprintf("#  %-#{max_size}.#{max_size}s:%-13.13s %s\n",
-        col.name, col_type, attrs.join(", "))
+        col.name, col_type, attrs.join(", ")).gsub(/\s+$/, "\n")
     end
 
     info << "#\n\n"
