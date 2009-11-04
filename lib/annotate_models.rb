@@ -70,11 +70,20 @@ module AnnotateModels
     if File.exist?(file_name)
       content = File.read(file_name)
 
+      # Get magic comment
+      first_line = content.to_a.first
+      if /\A#\s*.*coding.*\n/ =~ first_line
+        magic_comment = first_line
+        content.sub!(/^#\s*.*coding.*\n/, '')
+      else
+        magic_comment = ''
+      end
+
       # Remove old schema info
       content.sub!(/^# #{PREFIX}.*?\n(#.*\n)*\n/, '')
 
       # Write it back
-      File.open(file_name, "w") { |f| f.puts info_block + content }
+      File.open(file_name, "w") { |f| f.puts magic_comment + info_block + content }
     end
   end
 
