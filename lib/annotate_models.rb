@@ -68,7 +68,7 @@ module AnnotateModels
 
   def self.annotate_one_file(file_name, info_block)
     if File.exist?(file_name)
-      content = File.read(file_name)
+      content = File.open(file_name, "rb") { |f| f.read }
 
       # Get magic comment
       first_line = content.to_a.first
@@ -83,7 +83,7 @@ module AnnotateModels
       content.sub!(/^# #{PREFIX}.*?\n(#.*\n)*\n/, '')
 
       # Write it back
-      File.open(file_name, "w") { |f| f.puts magic_comment + info_block + content }
+      File.open(file_name, "wb") { |f| f.puts magic_comment + info_block + content }
     end
   end
 
